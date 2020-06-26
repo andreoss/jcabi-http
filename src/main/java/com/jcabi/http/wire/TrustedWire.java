@@ -69,24 +69,7 @@ public final class TrustedWire implements Wire {
     /**
      * Trust manager.
      */
-    private static final TrustManager MANAGER = new X509TrustManager() {
-        @Override
-        public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[0];
-        }
-
-        @Override
-        public void checkClientTrusted(final X509Certificate[] certs,
-            final String type) {
-            // nothing to check here
-        }
-
-        @Override
-        public void checkServerTrusted(final X509Certificate[] certs,
-            final String types) {
-            // nothing to check here
-        }
-    };
+    private static final TrustManager MANAGER = new WireX509TrustManager();
 
     /**
      * Original wire.
@@ -103,21 +86,23 @@ public final class TrustedWire implements Wire {
 
     // @checkstyle ParameterNumber (13 lines)
     @Override
-    public Response send(final Request req, final String home,
+    public Response send(
+        final Request req, final String home,
         final String method,
         final Collection<Map.Entry<String, String>> headers,
         final InputStream content,
         final int connect, final int read,
-        final SSLContext context) throws IOException {
-        final SSLContext resolvedContext;
+        final SSLContext context
+    ) throws IOException {
+        final SSLContext ctx;
         if (context == null) {
-            resolvedContext = context();
+            ctx = TrustedWire.context();
         } else {
-            resolvedContext = context;
+            ctx = context;
         }
         return this.origin.send(
-                req, home, method, headers, content,
-                connect, read, resolvedContext
+            req, home, method, headers, content,
+            connect, read, ctx
         );
     }
 
@@ -139,4 +124,31 @@ public final class TrustedWire implements Wire {
         }
     }
 
+    /**
+     * Trust manager for the Wire.
+     *
+     * @since 1.17.3
+     */
+    static final class WireX509TrustManager implements X509TrustManager {
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+
+        @Override
+        public void checkClientTrusted(
+            final X509Certificate[] certs,
+            final String type
+        ) {
+            // nothing to check here
+        }
+
+        @Override
+        public void checkServerTrusted(
+            final X509Certificate[] certs,
+            final String types
+        ) {
+            // nothing to check here
+        }
+    }
 }
