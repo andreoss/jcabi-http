@@ -40,7 +40,7 @@ import javax.net.ssl.SSLContext;
  * Wire.
  *
  * <p>An instance of this interface can be used in
- * {@link Request#through(Class,Object...)} to decorate
+ * {@link Request#through(Class, Object...)} to decorate
  * an existing {@code wire}, for example:
  *
  * <pre> String html = new JdkRequest("http://google.com")
@@ -72,10 +72,12 @@ public interface Wire {
      * @return Response obtained
      * @throws IOException if fails
      */
-    Response send(Request req, String home, String method,
-                  Collection<Map.Entry<String, String>> headers,
-                  InputStream content, int connect, int read,
-                  SSLContext sslcontext)
+    Response send(
+        Request req, String home, String method,
+        Collection<Map.Entry<String, String>> headers,
+        InputStream content, int connect, int read,
+        SSLContext sslcontext
+    )
         throws IOException;
 
 }

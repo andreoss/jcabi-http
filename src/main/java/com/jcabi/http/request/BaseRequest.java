@@ -56,8 +56,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonStructure;
-import javax.ws.rs.core.HttpHeaders;
 import javax.net.ssl.SSLContext;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 
@@ -81,7 +81,8 @@ import lombok.EqualsAndHashCode;
 //  first one, since maybe qulice is counting the methods in the inner
 //  classes too - if it doesn't, then it can be left.
 //@checkstyle LineLength (1 line)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.GodClass", "PMD.ExcessiveImports"})
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.GodClass",
+    "PMD.ExcessiveImports"})
 public final class BaseRequest implements Request {
 
     /**
@@ -164,9 +165,11 @@ public final class BaseRequest implements Request {
      * @param method HTTP method
      * @param body HTTP request body
      */
-    public BaseRequest(final Wire wre, final String uri,
+    public BaseRequest(
+        final Wire wre, final String uri,
         final Iterable<Map.Entry<String, String>> headers,
-        final String method, final byte[] body) {
+        final String method, final byte[] body
+    ) {
         this(wre, uri, headers, method, body, 0, 0);
         //@checkstyle ParameterNumber (15 lines)
     }
@@ -181,10 +184,12 @@ public final class BaseRequest implements Request {
      * @param cnct Connect timeout for http connection
      * @param rdd Read timeout for http connection
      */
-    public BaseRequest(final Wire wre, final String uri,
+    public BaseRequest(
+        final Wire wre, final String uri,
         final Iterable<Map.Entry<String, String>> headers,
         final String method, final byte[] body,
-        final int cnct, final int rdd) {
+        final int cnct, final int rdd
+    ) {
         this(wre, uri, headers, method, body, cnct, rdd, null);
     }
 
@@ -200,11 +205,13 @@ public final class BaseRequest implements Request {
      * @param context The SSL context to use
      * @checkstyle ParameterNumber (5 lines)
      */
-    public BaseRequest(final Wire wre, final String uri,
-                       final Iterable<Map.Entry<String, String>> headers,
-                       final String method, final byte[] body,
-                       final int cnct, final int rdd,
-                       final SSLContext context) {
+    public BaseRequest(
+        final Wire wre, final String uri,
+        final Iterable<Map.Entry<String, String>> headers,
+        final String method, final byte[] body,
+        final int cnct, final int rdd,
+        final SSLContext context
+    ) {
         this.wire = wre;
         this.home = BaseRequest.createUri(uri).toString();
         this.hdrs = new Array<>(headers);
@@ -218,14 +225,14 @@ public final class BaseRequest implements Request {
     @Override
     public Request sslcontext(final SSLContext context) {
         return new BaseRequest(
-                this.wire,
-                this.home,
-                this.hdrs,
-                this.mtd,
-                this.content,
-                this.connect,
-                this.read,
-                context
+            this.wire,
+            this.home,
+            this.hdrs,
+            this.mtd,
+            this.content,
+            this.connect,
+            this.read,
+            context
         );
     }
 
@@ -320,8 +327,10 @@ public final class BaseRequest implements Request {
     }
 
     @Override
-    public <T extends Wire> Request through(final Class<T> type,
-        final Object... args) {
+    public <T extends Wire> Request through(
+        final Class<T> type,
+        final Object... args
+    ) {
         Constructor<?> ctor = null;
         for (final Constructor<?> opt : type.getDeclaredConstructors()) {
             if (opt.getParameterTypes().length == args.length + 1) {

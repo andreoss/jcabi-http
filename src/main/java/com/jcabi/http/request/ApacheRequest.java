@@ -82,29 +82,31 @@ public final class ApacheRequest implements Request {
     private static final Wire WIRE = new Wire() {
         // @checkstyle ParameterNumber (6 lines)
         @Override
-        public Response send(final Request req, final String home,
+        public Response send(
+            final Request req, final String home,
             final String method,
             final Collection<Map.Entry<String, String>> headers,
             final InputStream content,
             final int connect,
             final int read,
-            final SSLContext sslcontext) throws IOException {
+            final SSLContext sslcontext
+        ) throws IOException {
             final CloseableHttpClient client = HttpClientBuilder.create()
-                    .useSystemProperties()
-                    .setSSLContext(sslcontext)
-                    .build();
+                .useSystemProperties()
+                .setSSLContext(sslcontext)
+                .build();
             try (CloseableHttpResponse response = client.execute(
-                    this.httpRequest(
-                            home, method, headers, content,
-                            connect, read
-                    )
+                this.httpRequest(
+                    home, method, headers, content,
+                    connect, read
+                )
             )) {
                 return new DefaultResponse(
-                        req,
-                        response.getStatusLine().getStatusCode(),
-                        response.getStatusLine().getReasonPhrase(),
-                        this.headers(response.getAllHeaders()),
-                        this.consume(response.getEntity())
+                    req,
+                    response.getStatusLine().getStatusCode(),
+                    response.getStatusLine().getReasonPhrase(),
+                    this.headers(response.getAllHeaders()),
+                    this.consume(response.getEntity())
                 );
             }
         }
@@ -121,12 +123,14 @@ public final class ApacheRequest implements Request {
          * @throws IOException If an IO Exception occurs
          * @checkstyle ParameterNumber (6 lines)
          */
-        public HttpEntityEnclosingRequestBase httpRequest(final String home,
+        public HttpEntityEnclosingRequestBase httpRequest(
+            final String home,
             final String method,
             final Collection<Map.Entry<String, String>> headers,
             final InputStream content,
             final int connect,
-            final int read) throws IOException {
+            final int read
+        ) throws IOException {
             final HttpEntityEnclosingRequestBase req =
                 new HttpEntityEnclosingRequestBase() {
                     @Override
@@ -270,8 +274,10 @@ public final class ApacheRequest implements Request {
     }
 
     @Override
-    public <T extends Wire> Request through(final Class<T> type,
-        final Object... args) {
+    public <T extends Wire> Request through(
+        final Class<T> type,
+        final Object... args
+    ) {
         return this.base.through(type, args);
     }
 
