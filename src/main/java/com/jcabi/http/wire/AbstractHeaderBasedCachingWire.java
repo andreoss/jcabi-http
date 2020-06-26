@@ -86,10 +86,11 @@ public abstract class AbstractHeaderBasedCachingWire implements Wire {
     // @checkstyle ParameterNumber (4 lines)
     @Override
     public final Response send(
-            final Request req, final String home, final String method,
-            final Collection<Map.Entry<String, String>> headers,
-            final InputStream content, final int connect, final int read,
-            final SSLContext sslcontext) throws IOException {
+        final Request req, final String home, final String method,
+        final Collection<Map.Entry<String, String>> headers,
+        final InputStream content, final int connect, final int read,
+        final SSLContext sslcontext
+    ) throws IOException {
         final Response rsp;
         if (method.equals(Request.GET) && !this.requestHasCmcHeader(headers)) {
             rsp = this.consultCache(
@@ -122,7 +123,8 @@ public abstract class AbstractHeaderBasedCachingWire implements Wire {
         final Request req, final String home, final String method,
         final Collection<Map.Entry<String, String>> headers,
         final InputStream content, final int connect, final int read,
-        final SSLContext sslcontext) throws IOException {
+        final SSLContext sslcontext
+    ) throws IOException {
         final Response rsp;
         if (this.cache.containsKey(req)) {
             rsp = this.validateCacheWithServer(
@@ -155,7 +157,8 @@ public abstract class AbstractHeaderBasedCachingWire implements Wire {
         final Request req, final String home, final String method,
         final Collection<Map.Entry<String, String>> headers,
         final InputStream content, final int connect, final int read,
-        final SSLContext sslcontext) throws IOException {
+        final SSLContext sslcontext
+    ) throws IOException {
         final Response cached = this.cache.get(req);
         final Collection<Map.Entry<String, String>> hdrs = this.enrich(
             headers, cached
