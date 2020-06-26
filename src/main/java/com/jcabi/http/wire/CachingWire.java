@@ -231,6 +231,7 @@ public final class CachingWire implements Wire {
          * Read timeout.
          */
         private final transient int read;
+
         /**
          * SSL Context.
          */
