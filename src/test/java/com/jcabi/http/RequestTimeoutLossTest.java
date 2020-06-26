@@ -318,7 +318,7 @@ public final class RequestTimeoutLossTest {
                 ArgumentMatchers.any(InputStream.class),
                 ArgumentMatchers.anyInt(),
                 ArgumentMatchers.anyInt(),
-                ArgumentMatchers.any(SSLContext.class)
+                ArgumentMatchers.<SSLContext>isNull()
             )
         ).thenReturn(response);
         new BaseRequest(original, url).through(wire).fetch();
@@ -330,7 +330,7 @@ public final class RequestTimeoutLossTest {
             ArgumentMatchers.any(InputStream.class),
             ArgumentMatchers.anyInt(),
             ArgumentMatchers.anyInt(),
-            ArgumentMatchers.any(SSLContext.class)
+            ArgumentMatchers.<SSLContext>isNull()
         );
         Mockito.verify(wire).send(
             ArgumentMatchers.any(Request.class),
@@ -340,7 +340,7 @@ public final class RequestTimeoutLossTest {
             ArgumentMatchers.any(InputStream.class),
             ArgumentMatchers.anyInt(),
             ArgumentMatchers.anyInt(),
-            ArgumentMatchers.any(SSLContext.class)
+            ArgumentMatchers.<SSLContext>isNull()
         );
     }
 
@@ -360,30 +360,28 @@ public final class RequestTimeoutLossTest {
                 .forClass(Integer.class);
             final ArgumentCaptor<Integer> rdc = ArgumentCaptor
                 .forClass(Integer.class);
-            MockWire.setMockDelegate(wire);
             final Response response = Mockito.mock(Response.class);
-            Mockito.when(
-                wire.send(
-                    Mockito.any(Request.class),
-                    Mockito.anyString(),
-                    Mockito.anyString(),
-                    Mockito.<Map.Entry<String, String>>anyCollection(),
-                    Mockito.any(InputStream.class),
-                    Mockito.anyInt(),
-                    Mockito.anyInt(),
-                    ArgumentMatchers.any(SSLContext.class)
-                )
-            ).thenReturn(response);
+            Mockito.doReturn(response).when(wire).send(
+                ArgumentMatchers.any(Request.class),
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.<Map.Entry<String, String>>anyCollection(),
+                ArgumentMatchers.any(InputStream.class),
+                ArgumentMatchers.anyInt(),
+                ArgumentMatchers.anyInt(),
+                ArgumentMatchers.<SSLContext>isNull()
+            );
+            MockWire.setMockDelegate(wire);
             exec.call();
             Mockito.verify(wire).send(
-                Mockito.any(Request.class),
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.<Map.Entry<String, String>>anyCollection(),
-                Mockito.any(InputStream.class),
+                ArgumentMatchers.any(Request.class),
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.<Map.Entry<String, String>>anyCollection(),
+                ArgumentMatchers.any(InputStream.class),
                 cnc.capture(),
                 rdc.capture(),
-                ArgumentMatchers.any(SSLContext.class)
+                ArgumentMatchers.<SSLContext>isNull()
             );
             MatcherAssert.assertThat(
                 cnc.getValue().intValue(),
