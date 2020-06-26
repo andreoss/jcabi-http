@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -44,8 +44,6 @@ import org.hamcrest.core.IsAnything;
 /**
  * Implementation of {@link MkContainer} based on Grizzly Server.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 0.10
  * @see MkContainer
  */
@@ -160,7 +158,7 @@ public final class MkGrizzlyContainer implements MkContainer {
     @RetryOnFailure
     private static int reserve() throws IOException {
         final int reserved;
-        try (final ServerSocket socket = new ServerSocket(0)) {
+        try (ServerSocket socket = new ServerSocket(0)) {
             reserved = socket.getLocalPort();
         }
         return reserved;

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -43,8 +43,6 @@ import lombok.EqualsAndHashCode;
 /**
  * A JSON response provided by the Jackson Project.
  *
- * @author Borislav Borisov (bborisov@protonmail.com)
- * @version $Id$
  * @since 1.17
  */
 @Immutable
@@ -72,6 +70,8 @@ public final class JacksonResponse extends AbstractResponse {
 
     /**
      * A tree representation views of JSON documents.
+     *
+     * @since 1.17.1
      */
     public static final class JsonReader {
         /**

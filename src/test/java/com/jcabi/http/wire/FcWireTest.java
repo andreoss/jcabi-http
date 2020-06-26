@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -43,8 +43,6 @@ import org.junit.Test;
 
 /**
  * Test case for {@link FcWire}.
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 1.0
  */
 public final class FcWireTest {

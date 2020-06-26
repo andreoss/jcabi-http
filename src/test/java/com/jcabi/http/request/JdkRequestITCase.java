@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -42,8 +42,7 @@ import org.junit.rules.ExpectedException;
 
 /**
  * Integration case for {@link JdkRequest}.
- * @author Carlos Miranda (miranda.cma@gmail.com)
- * @version $Id$
+ * @since 1.4.1
  */
 public final class JdkRequestITCase {
 

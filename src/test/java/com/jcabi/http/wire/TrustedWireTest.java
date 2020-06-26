@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -39,8 +39,6 @@ import org.junit.Test;
 
 /**
  * Test case for {@link TrustedWire}.
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 1.10
  */
 public final class TrustedWireTest {

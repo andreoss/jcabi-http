@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -73,13 +73,11 @@ import lombok.ToString;
  *
  * <p>The class is immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 1.0
  */
 @Immutable
 @ToString
-@EqualsAndHashCode(of = { "origin", "regex" })
+@EqualsAndHashCode(of = {"origin", "regex"})
 public final class CachingWire implements Wire {
 
     /**
@@ -186,40 +184,49 @@ public final class CachingWire implements Wire {
      * Invalidate the entire cache.
      * @since 1.15
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static void invalidate() {
         CachingWire.CACHE.invalidateAll();
     }
 
     /**
      * Query.
+     *
+     * @since 1.8.3
      */
     @ToString
-    @EqualsAndHashCode(of = { "origin", "request", "uri", "headers" })
+    @EqualsAndHashCode(of = {"origin", "request", "uri", "headers"})
     private static final class Query {
         /**
          * Origin wire.
          */
         private final transient Wire origin;
+
         /**
          * Request.
          */
         private final transient Request request;
+
         /**
          * URI.
          */
         private final transient String uri;
+
         /**
          * Headers.
          */
         private final transient Collection<Map.Entry<String, String>> headers;
+
         /**
          * Body.
          */
         private final transient InputStream body;
+
         /**
          * Connect timeout.
          */
         private final transient int connect;
+
         /**
          * Read timeout.
          */
@@ -254,6 +261,7 @@ public final class CachingWire implements Wire {
             this.read = rdd;
             this.sslcontext = sslcontext;
         }
+
         /**
          * Fetch.
          * @return Response

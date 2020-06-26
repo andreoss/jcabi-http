@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -67,8 +67,6 @@ import org.hamcrest.Matchers;
  *
  * <p>The class is immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 0.8
  */
 @Immutable
@@ -314,12 +312,16 @@ public final class RestResponse extends AbstractResponse {
 
     /**
      * Status matcher.
+     *
+     * @since 1.2
      */
     private static final class StatusMatch extends CustomMatcher<Response> {
+
         /**
          * HTTP status to check.
          */
         private final transient int status;
+
         /**
          * Ctor.
          * @param msg Message to show
@@ -329,6 +331,7 @@ public final class RestResponse extends AbstractResponse {
             super(msg);
             this.status = sts;
         }
+
         @Override
         public boolean matches(final Object resp) {
             return Response.class.cast(resp).status() == this.status;

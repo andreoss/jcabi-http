@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -45,8 +45,7 @@ import org.junit.Test;
 /**
  * Test case for {@link AutoRedirectingWire}.
  *
- * @author Carlos Miranda (miranda.cma@gmail.com)
- * @version $Id$
+ * @since 1.7
  */
 public final class AutoRedirectingWireTest {
 

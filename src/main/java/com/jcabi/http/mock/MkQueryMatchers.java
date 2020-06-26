@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -33,9 +33,9 @@ import org.hamcrest.Matcher;
 
 /**
  * Convenient set of matchers for {@link MkQuery}.
- * @author Carlos Miranda (miranda.cma@gmail.com)
- * @version $Id$
+ * @since 1.5
  */
+@SuppressWarnings("PMD.ProhibitPublicStaticMethods")
 public final class MkQueryMatchers {
 
     /**

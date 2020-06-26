@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -43,8 +43,6 @@ import org.junit.Test;
 
 /**
  * Test case for {@link ETagCachingWire}.
- * @author Ievgen Degtiarenko (ievgen.degtiarenko@gmail.com)
- * @version $Id$
  * @since 2.0
  */
 public final class ETagCachingWireTest {
@@ -87,15 +85,15 @@ public final class ETagCachingWireTest {
      */
     @Test
     public void detectsContentModification() throws IOException {
-        final String beforeChange = "before change";
-        final String afterChange = "after change";
+        final String before = "before change";
+        final String after = "after change";
         final MkContainer container = new MkGrizzlyContainer()
             .next(
-                new MkAnswer.Simple(beforeChange)
+                new MkAnswer.Simple(before)
                     .withHeader(HttpHeaders.ETAG, "3e26")
             )
             .next(
-                new MkAnswer.Simple(afterChange)
+                new MkAnswer.Simple(after)
                     .withHeader(HttpHeaders.ETAG, "3e27")
             )
             .start();
@@ -106,12 +104,12 @@ public final class ETagCachingWireTest {
             .fetch()
             .as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
-            .assertBody(Matchers.equalTo(beforeChange));
+            .assertBody(Matchers.equalTo(before));
         req
             .fetch()
             .as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
-            .assertBody(Matchers.equalTo(afterChange));
+            .assertBody(Matchers.equalTo(after));
         container.stop();
     }
 }

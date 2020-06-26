@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -48,13 +48,11 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 /**
  * Test case for {@link BasicAuthWire}.
  *
- * @version $Id$
- * @author Jakob Oswald (jakob.oswald@gmx.net)
+ * @since 1.17.1
  */
 @RunWith(Parameterized.class)
 public final class BasicAuthWireTest {
@@ -72,7 +70,9 @@ public final class BasicAuthWireTest {
     /**
      * The charset to use.
      */
-    private static final Charset CHARSET = Charset.forName(ENCODING);
+    private static final Charset CHARSET = Charset.forName(
+        BasicAuthWireTest.ENCODING
+    );
 
     /**
      * The username to use for authentication.
@@ -102,9 +102,9 @@ public final class BasicAuthWireTest {
      * @return The username and password parameters used to construct
      *  the test
      */
-    @Parameters
+    @Parameterized.Parameters
     public static Collection<Object[]> getParameters() {
-        final Collection<Object[]> parameters = new ArrayList<Object[]>(10);
+        final Collection<Object[]> parameters = new ArrayList<>(10);
         parameters.add(new String[] {"Alice", "secret"});
         parameters.add(new String[] {"Bob", "s&e+c`ret"});
         parameters.add(new String[] {"user", "\u20ac\u20ac"});
@@ -122,25 +122,25 @@ public final class BasicAuthWireTest {
             new MkAnswer.Simple("")
         ).start();
         final URI uri = UriBuilder.fromUri(container.home()).userInfo(
-                String.format(
-                        CRED_FORMAT,
-                        URLEncoder.encode(this.username, ENCODING),
-                        URLEncoder.encode(this.password, ENCODING)
-                )
+            String.format(
+                BasicAuthWireTest.CRED_FORMAT,
+                URLEncoder.encode(this.username, BasicAuthWireTest.ENCODING),
+                URLEncoder.encode(this.password, BasicAuthWireTest.ENCODING)
+            )
         ).build();
-        final String expectedHeader = expectHeader(
-                this.username,
-                this.password
+        final String expected = BasicAuthWireTest.expectHeader(
+            this.username,
+            this.password
         );
         new JdkRequest(uri)
-                .through(BasicAuthWire.class)
-                .fetch()
-                .as(RestResponse.class)
-                .assertStatus(HttpURLConnection.HTTP_OK);
+            .through(BasicAuthWire.class)
+            .fetch()
+            .as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_OK);
         container.stop();
         MatcherAssert.assertThat(
             container.take().headers().get(HttpHeaders.AUTHORIZATION).get(0),
-            Matchers.equalTo(expectedHeader)
+            Matchers.equalTo(expected)
         );
     }
 
@@ -154,13 +154,13 @@ public final class BasicAuthWireTest {
      *  <code>Basic &lt;base64 of username:password&gt;</code>
      */
     private static String expectHeader(final String username,
-            final String password) {
+        final String password) {
         final String credentials = DatatypeConverter.printBase64Binary(
-                String.format(
-                        CRED_FORMAT,
-                        username,
-                        password
-                ).getBytes(CHARSET)
+            String.format(
+                BasicAuthWireTest.CRED_FORMAT,
+                username,
+                password
+            ).getBytes(BasicAuthWireTest.CHARSET)
         );
         return String.format("Basic %s", credentials);
     }

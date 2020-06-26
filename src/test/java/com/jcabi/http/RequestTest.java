@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -46,12 +46,12 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
-import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -60,15 +60,13 @@ import org.junit.runners.Parameterized;
 
 /**
  * Test case for {@link Request} and its implementations.
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
- * @checkstyle IndentationCheck (7 lines)
+ * @since 1.7
  */
-@SuppressWarnings({
-    "PMD.TooManyMethods", "PMD.DoNotUseThreads",
-    "PMD.AvoidCatchingGenericException",
-    "PMD.AvoidThrowingRawExceptionTypes", "PMD.ExcessiveImports"
-})
+@SuppressWarnings(
+    {
+        "PMD.TooManyMethods",
+        "PMD.AvoidDuplicateLiterals"
+    })
 @RunWith(Parameterized.class)
 public final class RequestTest {
     /**
@@ -175,7 +173,10 @@ public final class RequestTest {
             .assertStatus(HttpURLConnection.HTTP_OK);
         final MkQuery query = container.take();
         MatcherAssert.assertThat(
-            URLDecoder.decode(query.uri().toString(), CharEncoding.UTF_8),
+            URLDecoder.decode(
+                query.uri().toString(),
+                String.valueOf(StandardCharsets.UTF_8)
+            ),
             Matchers.endsWith("\"€\"")
         );
         container.stop();
@@ -202,7 +203,7 @@ public final class RequestTest {
             .assertStatus(HttpURLConnection.HTTP_OK);
         final MkQuery query = container.take();
         MatcherAssert.assertThat(
-            URLDecoder.decode(query.body(), CharEncoding.UTF_8),
+            URLDecoder.decode(query.body(), StandardCharsets.UTF_8.toString()),
             Matchers.is(String.format("p=%s", value))
         );
         container.stop();
@@ -233,7 +234,7 @@ public final class RequestTest {
             .assertStatus(HttpURLConnection.HTTP_OK);
         final MkQuery query = container.take();
         MatcherAssert.assertThat(
-            URLDecoder.decode(query.body(), CharEncoding.UTF_8),
+            URLDecoder.decode(query.body(), StandardCharsets.UTF_8.toString()),
             Matchers.is(
                 String.format("a=%s&b=%s", value, follow)
             )
@@ -391,12 +392,14 @@ public final class RequestTest {
                 HttpHeaders.CONTENT_TYPE,
                 MediaType.APPLICATION_FORM_URLENCODED
             )
-            .body().set(URLEncoder.encode(value, CharEncoding.UTF_8)).back()
+            .body()
+            .set(URLEncoder.encode(value, StandardCharsets.UTF_8.toString()))
+            .back()
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
         final MkQuery query = container.take();
         MatcherAssert.assertThat(
-            URLDecoder.decode(query.body(), CharEncoding.UTF_8),
+            URLDecoder.decode(query.body(), StandardCharsets.UTF_8.toString()),
             Matchers.containsString(value)
         );
         container.stop();
@@ -624,7 +627,7 @@ public final class RequestTest {
         ).start();
         final String value = "\u20ac body as stream \"&^%*;'\"";
         final ByteArrayInputStream stream =
-            new ByteArrayInputStream(value.getBytes(CharEncoding.UTF_8));
+            new ByteArrayInputStream(value.getBytes(StandardCharsets.UTF_8));
         this.request(container.home())
             .method(Request.POST)
             .header(
@@ -651,7 +654,9 @@ public final class RequestTest {
         this.request(new URI("http://localhost:78787"))
             .method(Request.GET)
             .body().set("already set").back()
-            .fetch(new ByteArrayInputStream("ba".getBytes(CharEncoding.UTF_8)));
+            .fetch(
+                new ByteArrayInputStream("ba".getBytes(StandardCharsets.UTF_8))
+            );
     }
 
     /**

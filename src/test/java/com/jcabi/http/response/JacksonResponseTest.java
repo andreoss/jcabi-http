@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -41,8 +41,6 @@ import org.junit.Test;
 /**
  * Test case for {@link JacksonResponse}.
  *
- * @author Borislav Borisov (bborisov@protonmail.com)
- * @version $Id$
  * @since 1.17
  */
 public final class JacksonResponseTest {

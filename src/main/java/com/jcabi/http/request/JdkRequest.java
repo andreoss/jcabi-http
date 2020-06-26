@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -65,8 +65,6 @@ import lombok.ToString;
  *
  * <p>The class is immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 0.8
  * // @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
@@ -85,26 +83,28 @@ public final class JdkRequest implements Request {
 
         // @checkstyle ParameterNumber (6 lines)
         @Override
-        public Response send(final Request req, final String home,
+        public Response send(
+            final Request req, final String home,
             final String method,
             final Collection<Map.Entry<String, String>> headers,
             final InputStream content,
             final int connect,
             final int read,
-            final SSLContext sslcontext) throws IOException {
+            final SSLContext sslcontext
+        ) throws IOException {
             final URLConnection raw = new URL(home).openConnection();
             if (!(raw instanceof HttpURLConnection)) {
                 throw new IOException(
-                        String.format(
-                                "'%s' opens %s instead of expected HttpURLConnection",
-                                home, raw.getClass().getName()
-                        )
+                    String.format(
+                        "'%s' opens %s instead of expected HttpURLConnection",
+                        home, raw.getClass().getName()
+                    )
                 );
             }
             HttpURLConnection conn = null;
             try {
                 conn = this.createHttpUrlConnection(
-                        raw, connect, read, method, headers, sslcontext
+                    raw, connect, read, method, headers, sslcontext
                 );
                 if (method.equals(Request.POST) || method.equals(Request.PUT)
                     || method.equals(Request.PATCH)) {
@@ -135,11 +135,14 @@ public final class JdkRequest implements Request {
                 }
             }
         }
+
         // @checkstyle ParameterNumber (4 lines)
-        private HttpURLConnection createHttpUrlConnection(final URLConnection raw,
-                                                          final int connect, final int read, final String method,
-                                                          final Collection<Map.Entry<String, String>> headers,
-                                                          final SSLContext sslcontext) throws IOException {
+        private HttpURLConnection createHttpUrlConnection(
+            final URLConnection raw,
+            final int connect, final int read, final String method,
+            final Collection<Map.Entry<String, String>> headers,
+            final SSLContext sslcontext
+        ) throws IOException {
 
             final HttpURLConnection conn = HttpURLConnection.class.cast(raw);
             conn.setConnectTimeout(connect);
@@ -156,30 +159,35 @@ public final class JdkRequest implements Request {
             }
             return conn;
         }
+
         /**
          * Fully write the input stream contents to the output stream.
          * @param content The content to write
          * @param output The output stream to write to
          * @throws IOException If an IO Exception occurs
          */
-        private void writeFully(final InputStream content,
-            final OutputStream output) throws IOException {
+        private void writeFully(
+            final InputStream content,
+            final OutputStream output
+        ) throws IOException {
             // @checkstyle MagicNumber (1 line)
             final byte[] buffer = new byte[8192];
             for (int bytes = content.read(buffer); bytes != -1;
-                bytes = content.read(buffer)) {
+                 bytes = content.read(buffer)) {
                 output.write(buffer, 0, bytes);
             }
         }
+
         /**
          * Get headers from response.
          * @param fields ImmutableHeader fields
          * @return Headers
          */
         private Array<Map.Entry<String, String>> headers(
-            final Map<String, List<String>> fields) {
+            final Map<String, List<String>> fields
+        ) {
             final Collection<Map.Entry<String, String>> headers =
-                new LinkedList<Map.Entry<String, String>>();
+                new LinkedList<>();
             for (final Map.Entry<String, List<String>> field
                 : fields.entrySet()) {
                 if (field.getKey() == null) {
@@ -191,6 +199,7 @@ public final class JdkRequest implements Request {
             }
             return new Array<>(headers);
         }
+
         /**
          * Get response body of connection.
          * @param conn Connection
@@ -214,7 +223,7 @@ public final class JdkRequest implements Request {
                     final ByteArrayOutputStream output =
                         new ByteArrayOutputStream();
                     for (int bytes = input.read(buffer); bytes != -1;
-                        bytes = input.read(buffer)) {
+                         bytes = input.read(buffer)) {
                         output.write(buffer, 0, bytes);
                     }
                     body = output.toByteArray();
@@ -306,8 +315,10 @@ public final class JdkRequest implements Request {
     }
 
     @Override
-    public <T extends Wire> Request through(final Class<T> type,
-        final Object... args) {
+    public <T extends Wire> Request through(
+        final Class<T> type,
+        final Object... args
+    ) {
         return this.base.through(type, args);
     }
 

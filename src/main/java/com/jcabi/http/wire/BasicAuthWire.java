@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -64,8 +64,6 @@ import lombok.ToString;
  *
  * <p>The class is immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 0.10
  * @see <a href="http://tools.ietf.org/html/rfc2617">RFC 2617 "HTTP Authentication: Basic and Digest Access Authentication"</a>
  */
@@ -108,7 +106,7 @@ public final class BasicAuthWire implements Wire {
         final int read,
         final SSLContext sslcontext) throws IOException {
         final Collection<Map.Entry<String, String>> hdrs =
-            new LinkedList<Map.Entry<String, String>>();
+            new LinkedList<>();
         boolean absent = true;
         for (final Map.Entry<String, String> header : headers) {
             if (header.getKey().equals(HttpHeaders.AUTHORIZATION)) {

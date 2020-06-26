@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -42,8 +42,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link GrizzlyQuery}.
- * @author Paul Polishchuk (ppol@ua.fm)
- * @version $Id$
+ * @since 1.13
  */
 public final class GrizzlyQueryTest {
 
@@ -70,16 +69,20 @@ public final class GrizzlyQueryTest {
 
     /**
      * Mock for GrizzlyInputStream, which returns desired byte array.
+     *
+     * @since 1.13
      */
     private static class MkGrizzlyInputStream extends GrizzlyInputStream {
         /**
          * Bytes to be returned by the stream.
          */
         private final transient byte[] bytes;
+
         /**
          * Is it empty?
          */
         private transient boolean empty;
+
         /**
          * Ctor.
          * @param bts Bytes
@@ -88,6 +91,7 @@ public final class GrizzlyQueryTest {
             super(new GrizzlyInputBuffer());
             this.bytes = Arrays.copyOf(bts, bts.length);
         }
+
         @Override
         public int read(final byte[] bts) throws IOException {
             int length = -1;

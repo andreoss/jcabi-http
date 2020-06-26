@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -44,8 +44,7 @@ import org.junit.Test;
 
 /**
  * Test case for {@link MkContainer}.
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
+ * @since 1.0
  */
 public final class MkContainerTest {
 
@@ -55,7 +54,7 @@ public final class MkContainerTest {
      */
     @Test
     public void worksAsServletContainer() throws Exception {
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container.next(
                 new MkAnswer.Simple(HttpURLConnection.HTTP_OK, "works fine!")
             ).start();
@@ -77,7 +76,7 @@ public final class MkContainerTest {
      */
     @Test
     public void understandsDuplicateHeaders() throws Exception {
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container.next(new MkAnswer.Simple("")).start();
             final String header = "X-Something";
             new JdkRequest(container.home())
@@ -102,7 +101,7 @@ public final class MkContainerTest {
     public void answersConditionally() throws Exception {
         final String match = "matching";
         final String mismatch = "not matching";
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container.next(
                 new MkAnswer.Simple(mismatch),
                 Matchers.not(new IsAnything<MkQuery>())
@@ -128,16 +127,16 @@ public final class MkContainerTest {
     @Test
     public void answersBinary() throws Exception {
         final byte[] body = {0x00, 0x01, 0x45, 0x21, (byte) 0xFF};
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container.next(
-                    new MkAnswer.Simple(HttpURLConnection.HTTP_OK)
-                            .withBody(body)
-                    ).start();
+                new MkAnswer.Simple(HttpURLConnection.HTTP_OK)
+                    .withBody(body)
+            ).start();
             new JdkRequest(container.home())
-                    .through(VerboseWire.class)
-                    .fetch().as(RestResponse.class)
-                    .assertStatus(HttpURLConnection.HTTP_OK)
-                    .assertBinary(Matchers.is(body));
+                .through(VerboseWire.class)
+                .fetch().as(RestResponse.class)
+                .assertStatus(HttpURLConnection.HTTP_OK)
+                .assertBinary(Matchers.is(body));
         }
     }
 
@@ -147,7 +146,7 @@ public final class MkContainerTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void returnsErrorIfNoMatches() throws Exception {
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container.next(
                 new MkAnswer.Simple("not supposed to match"),
                 Matchers.not(new IsAnything<MkQuery>())
@@ -168,7 +167,7 @@ public final class MkContainerTest {
     public void canAnswerMultipleTimes() throws Exception {
         final String body = "multiple";
         final int times = 5;
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container.next(
                 new MkAnswer.Simple(body),
                 new IsAnything<MkQuery>(),
@@ -193,7 +192,7 @@ public final class MkContainerTest {
     public void prioritizesMatchingAnswers() throws Exception {
         final String first = "first";
         final String second = "second";
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container
                 .next(new MkAnswer.Simple(first), new IsAnything<MkQuery>())
                 .next(new MkAnswer.Simple(second), new IsAnything<MkQuery>())
@@ -219,7 +218,7 @@ public final class MkContainerTest {
     public void takesMatchingQuery() throws Exception {
         final String request = "reqBodyMatches";
         final String response = "respBodyMatches";
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container
                 .next(new MkAnswer.Simple(response))
                 .next(new MkAnswer.Simple("bleh"))
@@ -253,7 +252,7 @@ public final class MkContainerTest {
         final String match = "multipleRequestMatches";
         final String mismatch = "multipleRequestNotMatching";
         final String response = "multipleResponseMatches";
-        try (final MkContainer container = new MkGrizzlyContainer()) {
+        try (MkContainer container = new MkGrizzlyContainer()) {
             container.next(
                 new MkAnswer.Simple(response),
                 MkQueryMatchers.hasBody(Matchers.is(match)),

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -36,8 +36,6 @@ import java.util.Arrays;
 /**
  * Byte builder for multipart body.
  *
- * @author Piotr Kotlicki (piotr.kotlicki@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 @Immutable

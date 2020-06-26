@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -64,8 +64,6 @@ import lombok.EqualsAndHashCode;
 /**
  * Base implementation of {@link Request}.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 0.8
  * // @checkstyle ClassDataAbstractionCoupling (500 lines)
  * @see Request
@@ -208,12 +206,8 @@ public final class BaseRequest implements Request {
                        final int cnct, final int rdd,
                        final SSLContext context) {
         this.wire = wre;
-        URI addr = URI.create(uri);
-        if (addr.getPath() != null && addr.getPath().isEmpty()) {
-            addr = UriBuilder.fromUri(addr).path("/").build();
-        }
-        this.home = addr.toString();
-        this.hdrs = new Array<Map.Entry<String, String>>(headers);
+        this.home = BaseRequest.createUri(uri).toString();
+        this.hdrs = new Array<>(headers);
         this.mtd = method;
         this.content = body.clone();
         this.connect = cnct;
@@ -237,7 +231,7 @@ public final class BaseRequest implements Request {
 
     @Override
     public RequestURI uri() {
-        return new BaseRequest.BaseURI(this, this.home);
+        return new BaseUri(this, this.home);
     }
 
     @Override
@@ -408,28 +402,45 @@ public final class BaseRequest implements Request {
             this.read, this.sslctx
         );
         final URI uri = URI.create(this.home);
-        Logger.info(
-            this,
-            "#fetch(%s %s%s %s): [%d %s] in %[ms]s",
-            this.mtd,
-            uri.getHost(),
-            // @checkstyle AvoidInlineConditionalsCheck (1 line)
-            uri.getPort() > 0 ? String.format(":%d", uri.getPort()) : "",
-            uri.getPath(),
-            response.status(),
-            response.reason(),
-            System.currentTimeMillis() - start
-        );
+        if (Logger.isInfoEnabled(this)) {
+            Logger.info(
+                this,
+                "#fetch(%s %s%s %s): [%d %s] in %[ms]s",
+                this.mtd,
+                uri.getHost(),
+                // @checkstyle AvoidInlineConditionalsCheck (1 line)
+                uri.getPort() > 0 ? String.format(":%d", uri.getPort()) : "",
+                uri.getPath(),
+                response.status(),
+                response.reason(),
+                System.currentTimeMillis() - start
+            );
+        }
         return response;
     }
 
     /**
+     * Create uri from String.
+     * @param uri String
+     * @return URI
+     */
+    private static URI createUri(final String uri) {
+        URI addr = URI.create(uri);
+        if (addr.getPath() != null && addr.getPath().isEmpty()) {
+            addr = UriBuilder.fromUri(addr).path("/").build();
+        }
+        return addr;
+    }
+
+    /**
      * Base URI.
+     *
+     * @since 1.0
      */
     @Immutable
     @EqualsAndHashCode(of = "address")
     @Loggable(Loggable.DEBUG)
-    private static final class BaseURI implements RequestURI {
+    private static final class BaseUri implements RequestURI {
         /**
          * URI encapsulated.
          */
@@ -445,7 +456,7 @@ public final class BaseRequest implements Request {
          * @param req Request
          * @param uri The URI to start with
          */
-        BaseURI(final BaseRequest req, final String uri) {
+        BaseUri(final BaseRequest req, final String uri) {
             this.owner = req;
             this.address = uri;
         }
@@ -475,12 +486,12 @@ public final class BaseRequest implements Request {
 
         @Override
         public RequestURI set(final URI uri) {
-            return new BaseRequest.BaseURI(this.owner, uri.toString());
+            return new BaseUri(this.owner, uri.toString());
         }
 
         @Override
         public RequestURI queryParam(final String name, final Object value) {
-            return new BaseRequest.BaseURI(
+            return new BaseUri(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .queryParam(name, "{value}")
@@ -498,7 +509,7 @@ public final class BaseRequest implements Request {
                 values[idx] = pair.getValue();
                 ++idx;
             }
-            return new BaseRequest.BaseURI(
+            return new BaseUri(
                 this.owner,
                 uri.build(values).toString()
             );
@@ -506,7 +517,7 @@ public final class BaseRequest implements Request {
 
         @Override
         public RequestURI path(final String segment) {
-            return new BaseRequest.BaseURI(
+            return new BaseUri(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .path(segment)
@@ -516,7 +527,7 @@ public final class BaseRequest implements Request {
 
         @Override
         public RequestURI userInfo(final String info) {
-            return new BaseRequest.BaseURI(
+            return new BaseUri(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .userInfo(info)
@@ -526,7 +537,7 @@ public final class BaseRequest implements Request {
 
         @Override
         public RequestURI port(final int num) {
-            return new BaseRequest.BaseURI(
+            return new BaseUri(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .port(num).build().toString()
@@ -536,6 +547,8 @@ public final class BaseRequest implements Request {
 
     /**
      * Body of a request with a form that has attachments.
+     *
+     * @since 1.17
      */
     private static final class MultipartFormBody implements RequestBody {
         /**
@@ -601,7 +614,7 @@ public final class BaseRequest implements Request {
 
         @Override
         public RequestBody formParam(final String name, final Object value) {
-            final String boundary = boundary();
+            final String boundary = this.boundary();
             final String dashes = "--";
             final byte[] last = Arrays.copyOfRange(
                 this.text,
@@ -675,6 +688,8 @@ public final class BaseRequest implements Request {
     /**
      * Body of a request with a simple form.
      * (enctype application/x-www-form-urlencoded)
+     *
+     * @since 1.17
      */
     @Immutable
     @EqualsAndHashCode(of = "text")

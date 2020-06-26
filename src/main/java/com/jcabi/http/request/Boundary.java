@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -37,8 +37,6 @@ import java.util.Random;
  * Boundary for content-type multipart/form-data.
  * This is a copy of boundary created by Apache HttpComponents HttpClient 4.5.
  *
- * @author Piotr Kotlicki (piotr.kotlicki@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 @Immutable
@@ -80,7 +78,9 @@ public final class Boundary {
         final int count = this.rand.nextInt(11) + 30;
         for (int index = 0; index < count; ++index) {
             buffer.append(
-                MULTIPART_CHARS[this.rand.nextInt(MULTIPART_CHARS.length)]
+                Boundary.MULTIPART_CHARS[
+                    this.rand.nextInt(MULTIPART_CHARS.length)
+                    ]
             );
         }
         return buffer.toString();

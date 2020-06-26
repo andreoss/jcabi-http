@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -53,8 +53,6 @@ import javax.net.ssl.SSLContext;
  * <p>Every {@code Wire} decorator passed to {@code through()} method
  * wraps a previously existing one.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 0.9
  */
 @Immutable

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -37,8 +37,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link MkAnswerMatchers}.
- * @author Carlos Miranda (miranda.cma@gmail.com)
- * @version $Id$
+ * @since 1.5
  */
 public final class MkAnswerMatchersTest {
 
@@ -67,10 +66,10 @@ public final class MkAnswerMatchersTest {
         final MkAnswer query = Mockito.mock(MkAnswer.class);
         Mockito.doReturn(body).when(query).bodyBytes();
         MatcherAssert.assertThat(
-                query,
-                MkAnswerMatchers.hasBodyBytes(
-                        Matchers.is(body)
-                )
+            query,
+            MkAnswerMatchers.hasBodyBytes(
+                Matchers.is(body)
+            )
         );
     }
 

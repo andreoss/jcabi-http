@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -39,9 +39,8 @@ import org.junit.Test;
 
 /**
  * Test case for {@link XmlResponse}.
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
+ * @since 1.1
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class XmlResponseTest {

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -36,8 +36,7 @@ import org.junit.Test;
 
 /**
  * Test case {@link Boundary}.
- * @author Piotr Kotlicki (piotr.kotlicki@gmail.com)
- * @version $Id$
+ * @since 1.17.3
  */
 public final class BoundaryTest {
 

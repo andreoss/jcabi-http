@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2017, jcabi.com
  * All rights reserved.
  *
@@ -65,8 +65,6 @@ import org.apache.http.util.EntityUtils;
  *
  * <p>The class is immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
  * @since 0.8
  * // @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
@@ -110,6 +108,7 @@ public final class ApacheRequest implements Request {
                 );
             }
         }
+
         /**
          * Create request.
          * @param home Home URI
@@ -153,6 +152,7 @@ public final class ApacheRequest implements Request {
             }
             return req;
         }
+
         /**
          * Fetch body from http entity.
          * @param entity HTTP entity
@@ -168,6 +168,7 @@ public final class ApacheRequest implements Request {
             }
             return body;
         }
+
         /**
          * Make a list of all hdrs.
          * @param list Apache HTTP hdrs
