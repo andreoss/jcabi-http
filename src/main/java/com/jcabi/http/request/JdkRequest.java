@@ -143,7 +143,6 @@ public final class JdkRequest implements Request {
             final Collection<Map.Entry<String, String>> headers,
             final SSLContext sslcontext
         ) throws IOException {
-
             final HttpURLConnection conn = HttpURLConnection.class.cast(raw);
             conn.setConnectTimeout(connect);
             conn.setReadTimeout(read);
@@ -172,8 +171,11 @@ public final class JdkRequest implements Request {
         ) throws IOException {
             // @checkstyle MagicNumber (1 line)
             final byte[] buffer = new byte[8192];
-            for (int bytes = content.read(buffer); bytes != -1;
-                 bytes = content.read(buffer)) {
+            for (
+                int bytes = content.read(buffer);
+                bytes != -1;
+                bytes = content.read(buffer)
+            ) {
                 output.write(buffer, 0, bytes);
             }
         }
@@ -222,8 +224,11 @@ public final class JdkRequest implements Request {
                     final byte[] buffer = new byte[8192];
                     final ByteArrayOutputStream output =
                         new ByteArrayOutputStream();
-                    for (int bytes = input.read(buffer); bytes != -1;
-                         bytes = input.read(buffer)) {
+                    for (
+                        int bytes = input.read(buffer);
+                        bytes != -1;
+                        bytes = input.read(buffer)
+                    ) {
                         output.write(buffer, 0, bytes);
                     }
                     body = output.toByteArray();
