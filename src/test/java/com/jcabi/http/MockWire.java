@@ -32,7 +32,7 @@ package com.jcabi.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Map.Entry;
+import java.util.Map;
 import javax.net.ssl.SSLContext;
 
 /**
@@ -65,19 +65,21 @@ public class MockWire implements Wire {
     }
 
     @Override
-    public final Response send(final Request req, final String home, final String method,
-            final Collection<Entry<String, String>> headers,
-            final InputStream content, final int connect, final int read,
-            final SSLContext sslcontext) throws IOException {
-        return mockDelegate.send(
-                req,
-                home,
-                method,
-                headers,
-                content,
-                connect,
-                read,
-                sslcontext
+    public final Response send(
+        final Request req, final String home, final String method,
+        final Collection<Map.Entry<String, String>> headers,
+        final InputStream content, final int connect, final int read,
+        final SSLContext sslcontext
+    ) throws IOException {
+        return MockWire.mockDelegate.send(
+            req,
+            home,
+            method,
+            headers,
+            content,
+            connect,
+            read,
+            sslcontext
         );
     }
 
