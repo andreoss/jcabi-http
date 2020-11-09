@@ -48,5 +48,4 @@ jobs:
         run: pdd --file=/dev/null
       - name: Qulice
         run: mvn -P qulice clean install -DskipTests=true --errors --batch-mode
-      - name: Site
-        run: mvn -P site clean site --errors --batch-mode
+
