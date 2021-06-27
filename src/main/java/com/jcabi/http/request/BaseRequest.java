@@ -51,12 +51,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonStructure;
+import javax.json.JsonWriter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
@@ -85,57 +87,51 @@ import lombok.EqualsAndHashCode;
 public final class BaseRequest implements Request {
 
     /**
-     * The encoding to use.
-     */
-    private static final String ENCODING = "UTF-8";
-
-    /**
      * The Charset to use.
      * @checkstyle ConstantUsageCheck (3 lines)
      */
-    private static final Charset CHARSET =
-        Charset.forName(BaseRequest.ENCODING);
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
 
     /**
      * An empty immutable {@code byte} array.
      */
-    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+    private static final byte[] EMPTY_BYTE_ARRAY = {};
 
     /**
      * Wire to use.
      */
-    private final transient Wire wire;
+    private final Wire wire;
 
     /**
      * Request URI.
      */
-    private final transient String home;
+    private final String home;
 
     /**
      * Method to use.
      */
-    private final transient String mtd;
+    private final String mtd;
 
     /**
      * Socket timeout to use.
      */
-    private final transient int connect;
+    private final int connect;
 
     /**
      * Read timeout to use.
      */
-    private final transient int read;
+    private final int read;
 
     /**
      * Headers.
      */
-    private final transient Array<Map.Entry<String, String>> hdrs;
+    private final Array<Map.Entry<String, String>> hdrs;
 
     /**
      * Body to use.
      */
     @Immutable.Array
-    private final transient byte[] content;
+    private final byte[] content;
 
     /**
      * Public ctor.
@@ -145,7 +141,7 @@ public final class BaseRequest implements Request {
     public BaseRequest(final Wire wre, final String uri) {
         this(
             wre, uri,
-            new Array<Map.Entry<String, String>>(),
+            new Array<>(),
             Request.GET, BaseRequest.EMPTY_BYTE_ARRAY
         );
         //@checkstyle ParameterNumber (15 lines)
@@ -159,9 +155,11 @@ public final class BaseRequest implements Request {
      * @param method HTTP method
      * @param body HTTP request body
      */
-    public BaseRequest(final Wire wre, final String uri,
+    public BaseRequest(
+        final Wire wre, final String uri,
         final Iterable<Map.Entry<String, String>> headers,
-        final String method, final byte[] body) {
+        final String method, final byte[] body
+    ) {
         this(wre, uri, headers, method, body, 0, 0);
         //@checkstyle ParameterNumber (15 lines)
     }
@@ -176,10 +174,12 @@ public final class BaseRequest implements Request {
      * @param cnct Connect timeout for http connection
      * @param rdd Read timeout for http connection
      */
-    public BaseRequest(final Wire wre, final String uri,
+    public BaseRequest(
+        final Wire wre, final String uri,
         final Iterable<Map.Entry<String, String>> headers,
         final String method, final byte[] body,
-        final int cnct, final int rdd) {
+        final int cnct, final int rdd
+    ) {
         this.wire = wre;
         this.home = BaseRequest.createUri(uri).toString();
         this.hdrs = new Array<>(headers);
@@ -320,7 +320,7 @@ public final class BaseRequest implements Request {
             );
         }
         return text.append('\n')
-            .append(new RequestBody.Printable(this.content).toString())
+            .append(new RequestBody.Printable(this.content))
             .toString();
     }
 
@@ -457,12 +457,12 @@ public final class BaseRequest implements Request {
         /**
          * URI encapsulated.
          */
-        private final transient String address;
+        private final String address;
 
         /**
          * Base request encapsulated.
          */
-        private final transient BaseRequest owner;
+        private final BaseRequest owner;
 
         /**
          * Public ctor.
@@ -568,12 +568,12 @@ public final class BaseRequest implements Request {
          * Content encapsulated.
          */
         @Immutable.Array
-        private final transient byte[] text;
+        private final byte[] text;
 
         /**
          * Base request encapsulated.
          */
-        private final transient BaseRequest owner;
+        private final BaseRequest owner;
 
         /**
          * Public ctor.
@@ -616,7 +616,9 @@ public final class BaseRequest implements Request {
         @Override
         public RequestBody set(final JsonStructure json) {
             final StringWriter writer = new StringWriter();
-            Json.createWriter(writer).write(json);
+            try (JsonWriter wrt = Json.createWriter(writer)) {
+                wrt.write(json);
+            }
             return this.set(writer.toString());
         }
 
@@ -713,12 +715,12 @@ public final class BaseRequest implements Request {
          * Content encapsulated.
          */
         @Immutable.Array
-        private final transient byte[] text;
+        private final byte[] text;
 
         /**
          * Base request encapsulated.
          */
-        private final transient BaseRequest owner;
+        private final BaseRequest owner;
 
         /**
          * Public ctor.
@@ -763,7 +765,9 @@ public final class BaseRequest implements Request {
         @Override
         public RequestBody set(final JsonStructure json) {
             final StringWriter writer = new StringWriter();
-            Json.createWriter(writer).write(json);
+            try (JsonWriter wrt = Json.createWriter(writer)) {
+                wrt.write(json);
+            }
             return this.set(writer.toString());
         }
 
@@ -787,7 +791,7 @@ public final class BaseRequest implements Request {
                         .append(
                             URLEncoder.encode(
                                 value.toString(),
-                                BaseRequest.ENCODING
+                                BaseRequest.CHARSET.name()
                             )
                         )
                         .toString()
