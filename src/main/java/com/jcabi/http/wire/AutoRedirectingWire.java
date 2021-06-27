@@ -74,12 +74,12 @@ public final class AutoRedirectingWire implements Wire {
     /**
      * Original wire.
      */
-    private final transient Wire origin;
+    private final Wire origin;
 
     /**
      * Maximum number of retries to be made.
      */
-    private final transient int max;
+    private final int max;
 
     /**
      * Public ctor.
@@ -134,6 +134,7 @@ public final class AutoRedirectingWire implements Wire {
             try {
                 TimeUnit.SECONDS.sleep((long) attempt);
             } catch (final InterruptedException ex) {
+                Thread.currentThread().interrupt();
                 throw new IOException(ex);
             }
             ++attempt;
