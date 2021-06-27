@@ -89,14 +89,12 @@ public final class ApacheRequest implements Request {
             final InputStream content,
             final int connect,
             final int read) throws IOException {
-            final CloseableHttpResponse response =
-                HttpClients.createSystem().execute(
-                    this.httpRequest(
-                        home, method, headers, content,
-                        connect, read
-                    )
-                );
-            try {
+            try (CloseableHttpResponse response = HttpClients.createSystem().execute(
+                this.httpRequest(
+                    home, method, headers, content,
+                    connect, read
+                )
+            )) {
                 return new DefaultResponse(
                     req,
                     response.getStatusLine().getStatusCode(),
@@ -104,8 +102,6 @@ public final class ApacheRequest implements Request {
                     this.headers(response.getAllHeaders()),
                     this.consume(response.getEntity())
                 );
-            } finally {
-                response.close();
             }
         }
 
@@ -186,14 +182,14 @@ public final class ApacheRequest implements Request {
                     )
                 );
             }
-            return new Array<Map.Entry<String, String>>(headers);
+            return new Array<>(headers);
         }
     };
 
     /**
      * Base request.
      */
-    private final transient Request base;
+    private final Request base;
 
     /**
      * Public ctor.
