@@ -82,14 +82,14 @@ public final class XmlResponse extends AbstractResponse {
     /**
      * Map of namespaces.
      */
-    private final transient ArrayMap<String, String> namespaces;
+    private final ArrayMap<String, String> namespaces;
 
     /**
      * Public ctor.
      * @param resp Response
      */
     public XmlResponse(final Response resp) {
-        this(resp, new ArrayMap<String, String>());
+        this(resp, new ArrayMap<>());
     }
 
     /**
