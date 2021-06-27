@@ -48,7 +48,7 @@ abstract class AbstractResponse implements Response {
     /**
      * Encapsulated response.
      */
-    private final transient Response response;
+    private final Response response;
 
     /**
      * Ctor.
