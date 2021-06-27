@@ -37,7 +37,6 @@ import com.jcabi.http.Wire;
 import com.jcabi.http.request.DefaultResponse;
 import com.jcabi.immutable.Array;
 import com.jcabi.log.Logger;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +54,9 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import javax.json.JsonString;
+import javax.json.JsonWriter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.FileUtils;
@@ -94,7 +95,7 @@ final class FcCache {
     /**
      * Directory to keep files in.
      */
-    private final transient String dir;
+    private final String dir;
 
     /**
      * Ctor.
@@ -147,10 +148,12 @@ final class FcCache {
      * @throws IOException If fails
      * @checkstyle ParameterNumberCheck (10 lines)
      */
-    public Response get(final String label, final Wire wire,
+    public Response get(
+        final String label, final Wire wire,
         final Request request, final String home, final String method,
         final Collection<Map.Entry<String, String>> headers,
-        final InputStream input, final int connect, final int read)
+        final InputStream input, final int connect, final int read
+    )
         throws IOException {
         final File file = this.file(label);
         final Response rsp;
@@ -178,11 +181,13 @@ final class FcCache {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private Response response(final Request req, final File file)
         throws IOException {
-        final JsonObject json = Json.createReader(
-            new ByteArrayInputStream(
-                FileUtils.readFileToByteArray(file)
-            )
-        ).readObject();
+        final JsonObject json;
+        try (
+            InputStream in = Files.newInputStream(file.toPath());
+            JsonReader rdr = Json.createReader(in)
+        ) {
+            json = rdr.readObject();
+        }
         final List<Map.Entry<String, String>> map = new LinkedList<>();
         final JsonObject headers = json.getJsonObject(FcCache.HEADERS);
         for (final String name : headers.keySet()) {
@@ -227,8 +232,11 @@ final class FcCache {
         if (file.getParentFile().mkdirs()) {
             Logger.debug(this, "directory created for %s", file);
         }
-        try (OutputStream out = Files.newOutputStream(file.toPath())) {
-            Json.createWriter(out).write(json.build());
+        try (
+            OutputStream out = Files.newOutputStream(file.toPath());
+            JsonWriter wrt = Json.createWriter(out)
+        ) {
+            wrt.write(json.build());
         }
         Logger.debug(this, "cache saved into %s", file);
         return response;
@@ -244,9 +252,9 @@ final class FcCache {
         try {
             path = Joiner.on("/").join(
                 URLEncoder.encode(label, StandardCharsets.UTF_8.toString())
-                    .replaceAll("_", "__")
-                    .replaceAll("\\+", "_")
-                    .replaceAll("%", "_")
+                    .replace("_", "__")
+                    .replace("\\+", "_")
+                    .replace("%", "_")
                     .split("(?<=\\G.{4})")
             );
         } catch (final UnsupportedEncodingException ex) {
