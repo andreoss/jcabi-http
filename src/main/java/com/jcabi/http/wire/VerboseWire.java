@@ -127,9 +127,7 @@ public final class VerboseWire implements Wire {
      * @return Indented text
      */
     private static String indent(final String text) {
-        return new StringBuilder("  ")
-            .append(text.replaceAll("(\n|\n\r)", "$1  "))
-            .toString();
+        return String.format("  %s", text.replaceAll("(\n|\n\r)", "$1  "));
     }
 
 }
