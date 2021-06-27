@@ -41,7 +41,7 @@ import com.jcabi.immutable.Array;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -65,39 +65,34 @@ public final class FakeRequest implements Request {
     /**
      * An empty immutable {@code byte} array.
      */
-    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
-
-    /**
-     * The Charset to use.
-     */
-    private static final Charset CHARSET = Charset.forName("UTF-8");
+    private static final byte[] EMPTY_BYTE_ARRAY = {};
 
     /**
      * Base request.
      * @checkstyle ParameterNumber (15 lines)
      */
-    private final transient Request base;
+    private final Request base;
 
     /**
      * Status code.
      */
-    private final transient int code;
+    private final int code;
 
     /**
      * Reason phrase.
      */
-    private final transient String phrase;
+    private final String phrase;
 
     /**
      * Headers.
      */
-    private final transient Array<Map.Entry<String, String>> hdrs;
+    private final Array<Map.Entry<String, String>> hdrs;
 
     /**
      * Content received.
      */
     @Immutable.Array
-    private final transient byte[] content;
+    private final byte[] content;
 
     /**
      * Public ctor.
@@ -106,7 +101,7 @@ public final class FakeRequest implements Request {
         this(
             HttpURLConnection.HTTP_OK,
             "OK",
-            Collections.<Map.Entry<String, String>>emptyList(),
+            Collections.emptyList(),
             FakeRequest.EMPTY_BYTE_ARRAY
         );
         //@checkstyle ParameterNumber (10 lines)
@@ -119,32 +114,24 @@ public final class FakeRequest implements Request {
      * @param headers HTTP headers
      * @param body HTTP body
      */
-    public FakeRequest(final int status, final String reason,
+    public FakeRequest(
+        final int status, final String reason,
         final Collection<Map.Entry<String, String>> headers,
-        final byte[] body) {
+        final byte[] body
+    ) {
         this.code = status;
         this.phrase = reason;
         this.hdrs = new Array<>(headers);
         this.content = body.clone();
+        // @checkstyle ParameterNumber (6 lines)
         this.base = new BaseRequest(
-            new Wire() {
-                @Override
-                // @checkstyle ParameterNumber (6 lines)
-                public Response send(final Request req, final String home,
-                    final String method,
-                    final Collection<Map.Entry<String, String>> headers,
-                    final InputStream text,
-                    final int connect,
-                    final int read) {
-                    return new DefaultResponse(
-                        req,
-                        FakeRequest.this.code,
-                        FakeRequest.this.phrase,
-                        FakeRequest.this.hdrs,
-                        FakeRequest.this.content
-                    );
-                }
-            },
+            (req, home, method, headers1, text, connect, read) -> new DefaultResponse(
+                req,
+                this.code,
+                this.phrase,
+                this.hdrs,
+                this.content
+            ),
             "http://localhost:12345/see-FakeRequest-class"
         );
     }
@@ -264,7 +251,7 @@ public final class FakeRequest implements Request {
      * @return New request
      */
     public FakeRequest withBody(final String text) {
-        return this.withBody(text.getBytes(FakeRequest.CHARSET));
+        return this.withBody(text.getBytes(StandardCharsets.UTF_8));
     }
 
     /**

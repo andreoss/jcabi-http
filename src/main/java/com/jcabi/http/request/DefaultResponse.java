@@ -63,29 +63,29 @@ public final class DefaultResponse implements Response {
     /**
      * Request.
      */
-    private final transient Request req;
+    private final Request req;
 
     /**
      * Status code.
      */
-    private final transient int code;
+    private final int code;
 
     /**
      * Reason phrase.
      */
-    private final transient String phrase;
+    private final String phrase;
 
     /**
      * Headers.
      */
-    private final transient Array<Map.Entry<String, String>> hdrs;
+    private final Array<Map.Entry<String, String>> hdrs;
 
     /**
      * Content received.
      */
     @Immutable.Array
     //@checkstyle ParameterNumber (15 lines)
-    private final transient byte[] content;
+    private final byte[] content;
 
     /**
      * Public ctor.
@@ -126,7 +126,7 @@ public final class DefaultResponse implements Response {
         final ConcurrentMap<String, List<String>> map =
             new ConcurrentHashMap<>(0);
         for (final Map.Entry<String, String> header : this.hdrs) {
-            map.putIfAbsent(header.getKey(), new LinkedList<String>());
+            map.putIfAbsent(header.getKey(), new LinkedList<>());
             map.get(header.getKey()).add(header.getValue());
         }
         return map;

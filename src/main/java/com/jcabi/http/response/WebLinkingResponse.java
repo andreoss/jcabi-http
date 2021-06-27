@@ -166,12 +166,12 @@ public final class WebLinkingResponse extends AbstractResponse {
         /**
          * URI encapsulated.
          */
-        private final transient String addr;
+        private final String addr;
 
         /**
          * Map of link params.
          */
-        private final transient ArrayMap<String, String> params;
+        private final ArrayMap<String, String> params;
 
         /**
          * Public ctor (parser).

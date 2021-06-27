@@ -49,23 +49,23 @@ public abstract class AbstractHeaderBasedCachingWire implements Wire {
     /**
      * Cache.
      */
-    private final transient Map<Request, Response> cache;
+    private final Map<Request, Response> cache;
 
     /**
      * Original wire.
      */
-    private final transient Wire origin;
+    private final Wire origin;
 
     /**
      * This header will be return by server to identify content version.
      */
-    private final transient String scvh;
+    private final String scvh;
 
     /**
      * This header will be sent by client to check if server content has
      * been changed.
      */
-    private final transient String cmch;
+    private final String cmch;
 
     /**
      * Ctor.

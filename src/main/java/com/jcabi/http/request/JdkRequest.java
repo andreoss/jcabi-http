@@ -208,7 +208,7 @@ public final class JdkRequest implements Request {
     /**
      * Base request.
      */
-    private final transient Request base;
+    private final Request base;
 
     /**
      * Public ctor.

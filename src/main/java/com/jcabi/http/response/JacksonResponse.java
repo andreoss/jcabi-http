@@ -84,7 +84,7 @@ public final class JacksonResponse extends AbstractResponse {
         /**
          * Response body.
          */
-        private final transient byte[] body;
+        private final byte[] body;
 
         /**
          * Public constructor.

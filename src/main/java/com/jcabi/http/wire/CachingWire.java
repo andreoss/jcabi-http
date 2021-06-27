@@ -120,7 +120,7 @@ public final class CachingWire implements Wire {
      * Default cache.
      */
     private static final LoadingCache<Wire,
-        LoadingCache<Callable<Response>, Response>> CACHE =
+        LoadingCache<Callable<Response>, Response>> DEFAULT_CACHE =
         CacheBuilder.newBuilder().build(CachingWire.LOADER);
 
     /**
@@ -131,12 +131,12 @@ public final class CachingWire implements Wire {
     /**
      * Original wire.
      */
-    private final transient Wire origin;
+    private final Wire origin;
 
     /**
      * Flushing regular expression.
      */
-    private final transient String regex;
+    private final String regex;
 
     /**
      * Cache.
@@ -145,7 +145,7 @@ public final class CachingWire implements Wire {
 
     /**
      * Public ctor.
-     * @param wire Original wire
+     * @param wire Original wirCWie
      */
     public CachingWire(final Wire wire) {
         this(wire, CachingWire.NEVER);
@@ -160,7 +160,7 @@ public final class CachingWire implements Wire {
     public CachingWire(final Wire wire, final String flsh) {
         this.origin = wire;
         this.regex = flsh;
-        this.cache = CACHE.getUnchecked(this);
+        this.cache = DEFAULT_CACHE.getUnchecked(this);
     }
 
     /**
@@ -239,7 +239,7 @@ public final class CachingWire implements Wire {
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static void invalidate() {
-        CachingWire.CACHE.invalidateAll();
+        CachingWire.DEFAULT_CACHE.invalidateAll();
     }
 
     /**
@@ -253,37 +253,37 @@ public final class CachingWire implements Wire {
         /**
          * Origin wire.
          */
-        private final transient Wire origin;
+        private final Wire origin;
 
         /**
          * Request.
          */
-        private final transient Request request;
+        private final Request request;
 
         /**
          * URI.
          */
-        private final transient String uri;
+        private final String uri;
 
         /**
          * Headers.
          */
-        private final transient Collection<Map.Entry<String, String>> headers;
+        private final Collection<Map.Entry<String, String>> headers;
 
         /**
          * Body.
          */
-        private final transient InputStream body;
+        private final InputStream body;
 
         /**
          * Connect timeout.
          */
-        private final transient int connect;
+        private final int connect;
 
         /**
          * Read timeout.
          */
-        private final transient int read;
+        private final int read;
 
         /**
          * Ctor.

@@ -72,7 +72,7 @@ public final class RetryWire implements Wire {
     /**
      * Original wire.
      */
-    private final transient Wire origin;
+    private final Wire origin;
 
     /**
      * Public ctor.

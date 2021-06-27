@@ -78,17 +78,17 @@ public final class FcWire implements Wire {
     /**
      * Cache in files.
      */
-    private final transient FcCache cache;
+    private final FcCache cache;
 
     /**
      * Original wire.
      */
-    private final transient Wire origin;
+    private final Wire origin;
 
     /**
      * Flushing regular expression.
      */
-    private final transient String regex;
+    private final String regex;
 
     /**
      * Public ctor.

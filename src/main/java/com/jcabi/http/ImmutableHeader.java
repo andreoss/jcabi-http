@@ -47,12 +47,12 @@ public final class ImmutableHeader implements Map.Entry<String, String> {
     /**
      * Key.
      */
-    private final transient String left;
+    private final String left;
 
     /**
      * Value.
      */
-    private final transient String right;
+    private final String right;
 
     /**
      * Public ctor.
