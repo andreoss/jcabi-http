@@ -23,4 +23,12 @@ jobs:
           java-version: 21
           distribution: 'temurin'
       - name: Maven
-        run: mvn --errors --batch-mode -Powasp dependency-check:check
+        run: |
+            if [ -z "${NVD_API_KEY:-}" ]; then
+                echo "NVD_API_KEY is NOT set"
+                exit 1
+            else
+                mvn -DnvdApiKey="$NVD_API_KEY" --errors --batch-mode -Powasp dependency-check:check
+            fi
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
